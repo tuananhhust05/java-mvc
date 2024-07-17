@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.epay.ewallet.service.post.mapperDataOne.IUser">
+
+	<resultMap type="com.epay.ewallet.service.post.model.User" id="User">
+		<result property="id" column="ID" />
+		<result property="phoneNumber" column="PHONE" />
+		<result property="name" column="NAME" />
+		<result property="email" column="EMAIL" />
+		<result property="status" column="STATUS" />
+		<result property="lang" column="LANG" />
+		<result property="password" column="PASSWORD" />
+		<result property="companyId" column="COMPANY_ID" />
+		<result property="avatar" column="AVATAR" />
+		<result property="nickname" column="NICKNAME" />
+		<result property="contactPhone" column="CONTACT_PHONE" />
+		<result property="position" column="POSITTION" />
+	</resultMap>
+
+	<select id="getUserByPhone" parameterType="String" resultMap="User"> 
+     	SELECT * FROM TBL_USERS
+    	WHERE PHONE = #{phoneNumber}  
+	</select>
+	<select id="getUserById" parameterType="String" resultMap="User"> 
+    	SELECT * FROM TBL_USERS
+    	WHERE ID = #{ID}
+	</select>
+	<select id="getUserByName" resultMap="User"> 
+		SELECT * FROM
+   (
+    SELECT a.*, ROWNUM rnum 
+        FROM(
+        SELECT PHONE, NICKNAME, CONTACT_PHONE, ID, NAME, AVATAR FROM TBL_USERS
+        WHERE FN_CONVERT_TO_VN_UPPERCASE(NAME) LIKE '%' || #{name} || '%'
+				AND STATUS >= 3 
+				AND USER_TYPE_ID = 1
+        ORDER BY NAME)
+        a WHERE ROWNUM &lt; #{des}
+    )
+	WHERE rnum &gt; #{src}
+	</select>
+
+	<select id="getUserByUserId" parameterType="long" resultMap="User"> 
+     	SELECT * FROM TBL_USERS
+    	WHERE ID = #{id}  
+	</select>
+	
+	<select id="getListUserById" parameterType="Map" resultMap="User">
+		SELECT TU.ID, TU.PHONE, TU.NAME, TU.EMAIL, TU.STATUS, TU.LANG, TU.COMPANY_ID, TU.AVATAR, TU.NICKNAME, TU.CONTACT_PHONE, TCU.POSITTION
+		FROM TBL_USERS TU
+		LEFT JOIN TBL_COMPANY_USER TCU ON TU.PHONE = TCU.PHONE_NUMBER
+		WHERE TU.ID IN
+		<foreach item="uid" collection="userIds" separator="," open="(" close=")">
+	        #{uid}
+	    </foreach>
+	    ORDER BY TU.ID ASC
+	</select>
+	
+</mapper>

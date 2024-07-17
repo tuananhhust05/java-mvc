@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.epay.ewallet.service.post.mapperDataOne.ICompany">
+
+	<resultMap type="com.epay.ewallet.service.post.model.Company" id="Company">
+		<result property="id" column="ID" />
+		<result property="shortName" column="SHORT_NAME" />
+		<result property="logo" column="LOGO" />
+		<result property="logoSocial" column="LOGO_SOCIAL" />
+	</resultMap>
+	
+	<select id="getCompanyById" parameterType="long" resultMap="Company">
+		SELECT * FROM TBL_COMPANIES
+		WHERE ID = #{companyId}
+	</select>
+</mapper>
