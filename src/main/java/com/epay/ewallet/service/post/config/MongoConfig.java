@@ -66,7 +66,6 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
 
 	@Override
 	public MongoClient mongoClient() {
-//        final ConnectionString connectionString = new ConnectionString("mongodb://ewallet:khongbiet@172.16.10.74:27017/ewallet?authSource=admin&directConnection=true&ssl=false");
 		final ConnectionString connectionString = new ConnectionString(uri);
 		final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
 				.applyConnectionString(connectionString)
